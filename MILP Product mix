@@ -1,1 +1,49 @@
+MODEL of the problem
 
+
+set P;   
+set R;
+
+param a{P,R};
+param b{R};
+param p{P};
+param l{P};
+param u{P};
+param f{P};
+
+var q{i in P} >= l[i], <= u[i], integer;
+var delta{P} binary;
+
+maximize uti:
+  sum{i in P} (p[i]*q[i] - f[i]*delta[i]);
+
+s.t. hour_cons{j in R}:
+  sum{i in P} a[i,j]*q[i] <= b[j];
+
+s.t. const{i in P}:
+  q[i] <= u[i]*delta[i];
+
+end;
+
+
+
+DATA of the problem 
+
+
+set P := P1 P2 P3;
+set R := R1 R2 R3;
+
+param: p l u f:=
+P1 1000 0 100 1000
+P2 1500 0 100 1100
+P3 2200 0 100 2500;
+
+param a: R1 R2 R3 :=
+P1 20 31 16
+P2 30 42 81
+P3 62 51 10;
+
+param: b :=
+R1 480
+R2 480
+R3 300;
